@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
 
     public void buttonClicked(ImageButton b){
+        count++;
         if(player){
             //cat's turn
             b.setImageResource(R.drawable.cat);
@@ -125,11 +126,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         //change player
         b.setClickable(false);
         player =!player;
-        count++;
 
-        if (count >= 9){
-            topText.setText("It's a tie!");
-        }
+
 
 
     }
@@ -211,10 +209,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         //sweep through the matrix left diagonal to see if there is 3 in the row
-       // int num = boxNum-1;
-       // if (checker[0][num] == checker[(num/2)][(num/2)] && checker[(num/2)][(num/2)] == checker[num][0] &&!b2.isClickable() ) {
-         //   winGame(3, num);
-        //}
+        int num = boxNum-1;
+        if (checker[0][num] == checker[(num/2)][(num/2)] && checker[(num/2)][(num/2)] == checker[num][0] &&!b2.isClickable() ) {
+            winGame(3, num);
+        }
         /*checkC = boxNum;
         checkD = boxNum;
         int num = boxNum-1;
@@ -225,8 +223,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             }
         }*/
+        if (count >= 9){
+            topText.setText("It's a tie!");
+        }
 
-}
+    }
 
     public void winGame (int cases, int rowcol){
         //win state cases:
@@ -237,26 +238,26 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         switch (cases) {
             case 0:
-                test("horizontal win");
+               // test("horizontal win");
                 int hdex = rowcol;
                 for (int i = 0; i < boxNum; i++) {
                     bArray[(hdex*boxNum)+i].setBackgroundColor(Color.YELLOW);
                 }
                 break;
             case 1:
-                test("vertical win");
+                //test("vertical win");
                 for (int vdex = rowcol; vdex < boxNum * boxNum; vdex = vdex + boxNum) {
                     bArray[vdex].setBackgroundColor(Color.YELLOW);
                 }
                 break;
             case 2:
-                test("left diagonal win");
+                //test("left diagonal win");
                 for (int ldex = 0; ldex < boxNum * boxNum; ldex = ldex + (boxNum + 1)) {
                     bArray[ldex].setBackgroundColor(Color.YELLOW);
                 }
                 break;
             case 3:
-                test("right diagonal win");
+                //test("right diagonal win");
                 for (int rdex = boxNum-1; rdex <= boxNum + boxNum; rdex = rdex + (boxNum - 1)) {
                     bArray[rdex].setBackgroundColor(Color.YELLOW);
                 }
