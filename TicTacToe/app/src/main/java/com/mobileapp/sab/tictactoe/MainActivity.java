@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     //counter
     int count = 0;
-    int boxNum = 9;
+    int boxNum = 3;
     int[][]checker= new int[boxNum][boxNum];
     //Top text
     TextView topText;
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         if (vStr.equalsIgnoreCase("restart")) {
             //restart button
             restartGame();
-        } else if (vStr.equalsIgnoreCase("button")) {
+        } else  {
             //any of the unclicked squares
             ImageButton b = (ImageButton) view;
             buttonClicked(b);
@@ -112,12 +112,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             //cat's turn
             b.setImageResource(R.drawable.cat);
             topText.setText("Dog's Turn");
-            b.setTag("cats");
+           // b.setTag("cats");
+            checkForWinner(b);
         } else{
             //dog's turn
             b.setImageResource(R.drawable.dog);
             topText.setText("Cat's Turn");
-            b.setTag("dogs");
+            checkForWinner(b);
+           // b.setTag("dogs");
         }
         //change player
         b.setClickable(false);
@@ -133,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     public void restartGame(){
         for (ImageButton b : bArray){
-            b.setTag("button");
             b.setImageResource(R.drawable.house);
             b.setClickable(true);
         }
@@ -155,9 +156,68 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         //test("RESTART GAME");
     }
 
-    public void checkForWinner(){
-        for (ImageButton b: bArray){
+    public void checkForWinner(ImageButton b){
+        //set the button location in the matrix to be true
+        String bStr = (String)b.getTag();
+        int row = Character.getNumericValue(bStr.charAt(0));
+        int col = Character.getNumericValue(bStr.charAt(1));
+        if(player){
+            checker[row][col] = 1;
+        } else {
+            checker[row][col] = 2;
+        }
+        int checkC = boxNum;
+        int checkD = boxNum;
 
+        //sweep through the matrix horizontally to see if there is 3 in the row
+        for(int r = 0; r <boxNum; r++) {
+            if (checkC <= 0 || checkD <=0) {
+                winGame(0, r);
+                break;
+            } else {
+                checkC = boxNum;
+                checkD = boxNum;
+            }
+            for (int c = 0; c < boxNum; c++) {
+                if (checker[r][c] == 1) { checkC--;}
+                if (checker[r][c] == 2) { checkD--;}
+            }
+        }
+        //sweep through the matrix vertically to see if there is 3 in the row
+        for(int c = 0; c <boxNum; c++){
+            if (checkC <= 0 || checkD <=0) {
+                 winGame(1,c);
+                 break;
+             } else {
+                checkC = boxNum;
+                checkD = boxNum;
+             }
+             for (int r = 0; r <boxNum; r++){
+                 if (checker[r][c] == 1) { checkC--;}
+                 if (checker[r][c] == 2) { checkD--;}
+             }
+        }
+}
+
+    public void winGame (int cases, int rowcol){
+        //win state cases:
+        // 0 = horizontal win with rowcol having row num
+        // 1 = vertical win with rowcol having col num
+        // 2 = left diagonal win
+        // 3 = right diagonal win
+
+        switch (cases){
+            case 0:
+                test("horizontal win");
+                restartGame();
+                break;
+            case 1:
+                test("vertical win");
+                restartGame();
+                break;
+            case 2:
+
+            case 3:
         }
 
     }
