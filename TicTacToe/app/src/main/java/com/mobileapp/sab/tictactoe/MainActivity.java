@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     int[][]checker= new int[boxNum][boxNum];
     //Top text
     TextView topText;
+    boolean win;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             player= false;
         }
         count = 0;
+        win = false;
         //test("RESTART GAME");
     }
 
@@ -223,7 +225,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             }
         }*/
-        if (count >= 9){
+
+        if (count >= 9 && win == false){
             topText.setText("It's a tie!");
         }
 
@@ -235,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         // 1 = vertical win with rowcol having col num
         // 2 = left diagonal win
         // 3 = right diagonal win
-
+        win = true;
         switch (cases) {
             case 0:
                // test("horizontal win");
