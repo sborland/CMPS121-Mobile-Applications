@@ -1,6 +1,7 @@
 package com.mobileapp.sab.tictactoe;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         for (ImageButton b : bArray){
             b.setImageResource(R.drawable.house);
             b.setClickable(true);
+            b.setBackgroundColor(Color.rgb(128,171,47));
         }
 
         for(int r = 0; r <boxNum; r++){
@@ -159,11 +161,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     public void checkForWinner(ImageButton b){
         //set the button location in the matrix to be true
         String bStr = (String)b.getTag();
+
         int row = Character.getNumericValue(bStr.charAt(0));
         int col = Character.getNumericValue(bStr.charAt(1));
         if(player){
+            //cat is 1
             checker[row][col] = 1;
         } else {
+            //dog is 0
             checker[row][col] = 2;
         }
         int checkC = boxNum;
@@ -171,32 +176,56 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         //sweep through the matrix horizontally to see if there is 3 in the row
         for(int r = 0; r <boxNum; r++) {
-            if (checkC <= 0 || checkD <=0) {
-                winGame(0, r);
-                break;
-            } else {
                 checkC = boxNum;
                 checkD = boxNum;
-            }
             for (int c = 0; c < boxNum; c++) {
                 if (checker[r][c] == 1) { checkC--;}
                 if (checker[r][c] == 2) { checkD--;}
+                if (checkC <= 0 || checkD <=0) {
+                    winGame(0, r);
+                }
             }
         }
         //sweep through the matrix vertically to see if there is 3 in the row
-        for(int c = 0; c <boxNum; c++){
-            if (checkC <= 0 || checkD <=0) {
-                 winGame(1,c);
-                 break;
-             } else {
-                checkC = boxNum;
-                checkD = boxNum;
-             }
-             for (int r = 0; r <boxNum; r++){
-                 if (checker[r][c] == 1) { checkC--;}
-                 if (checker[r][c] == 2) { checkD--;}
-             }
+        for(int c = 0; c <boxNum; c++) {
+            checkC = boxNum;
+            checkD = boxNum;
+            for (int r = 0; r < boxNum; r++) {
+                if (checker[r][c] == 1) { checkC--;}
+                if (checker[r][c] == 2) { checkD--;}
+                if (checkC <= 0 || checkD <= 0) {
+                    winGame(1, c);
+                }
+            }
         }
+
+        //sweep through the matrix left diagonal to see if there is 3 in the row
+        checkC = boxNum;
+        checkD = boxNum;
+        for(int n = 0; n <boxNum; n++) {
+            if (checker[n][n] == 1) { checkC--;}
+            if (checker[n][n] == 2) { checkD--;}
+            if (checkC <= 0 || checkD <=0) {
+                winGame(2, n);
+            }
+        }
+
+        //sweep through the matrix left diagonal to see if there is 3 in the row
+       // int num = boxNum-1;
+       // if (checker[0][num] == checker[(num/2)][(num/2)] && checker[(num/2)][(num/2)] == checker[num][0] &&!b2.isClickable() ) {
+         //   winGame(3, num);
+        //}
+        /*checkC = boxNum;
+        checkD = boxNum;
+        int num = boxNum-1;
+        for(int c = num; c >0; c--) {
+            if (checker[num-c][c] == 1) { test(bStr);checkC--;}
+            if (checker[num-c][c] == 2) {test(bStr); checkD--;}
+            if (checkC <= 0 || checkD <= 0) {
+
+            }
+        }*/
+
 }
 
     public void winGame (int cases, int rowcol){
@@ -206,20 +235,42 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         // 2 = left diagonal win
         // 3 = right diagonal win
 
-        switch (cases){
+        switch (cases) {
             case 0:
                 test("horizontal win");
-                restartGame();
+                int hdex = rowcol;
+                for (int i = 0; i < boxNum; i++) {
+                    bArray[(hdex*boxNum)+i].setBackgroundColor(Color.YELLOW);
+                }
                 break;
             case 1:
                 test("vertical win");
-                restartGame();
+                for (int vdex = rowcol; vdex < boxNum * boxNum; vdex = vdex + boxNum) {
+                    bArray[vdex].setBackgroundColor(Color.YELLOW);
+                }
                 break;
             case 2:
-
+                test("left diagonal win");
+                for (int ldex = 0; ldex < boxNum * boxNum; ldex = ldex + (boxNum + 1)) {
+                    bArray[ldex].setBackgroundColor(Color.YELLOW);
+                }
+                break;
             case 3:
+                test("right diagonal win");
+                for (int rdex = boxNum-1; rdex <= boxNum + boxNum; rdex = rdex + (boxNum - 1)) {
+                    bArray[rdex].setBackgroundColor(Color.YELLOW);
+                }
+                break;
+        }
+        if(player){
+            topText.setText("Cat Wins!");
+        } else {
+            topText.setText("Dog Wins!");
         }
 
+        for (ImageButton b : bArray){
+            b.setClickable(false);
+        }
     }
 
 
