@@ -24,11 +24,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     Button rBut;
     ImageButton[] bArray;
 
-    //X is True and O is false
+    //cat is True and dog is false
     boolean player = true;
 
     //counter
     int count = 0;
+    int boxNum = 9;
+    int[][]checker= new int[boxNum][boxNum];
     //Top text
     TextView topText;
 
@@ -42,6 +44,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         //initalize variables
         count = 0;
         topText = (TextView) findViewById(R.id.Top);
+        for(int r = 0; r <boxNum; r++){
+            for (int c = 0; c <boxNum; c++){
+                checker[r][c]=0;
+            }
+        }
+
         //Linking buttons to their counterparts in the layout file
         a1 = (ImageButton) findViewById (R.id.A1);
         a2 = (ImageButton) findViewById(R.id.A2);
@@ -55,11 +63,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         rBut = (Button) findViewById(R.id.restart);
         bArray = new ImageButton[]{a1, a2, a3, b1,b2,b3, c1,c2,c3};
 
+        rBut.setOnClickListener(this);
         //event listeners for the buttons
         for (ImageButton b : bArray){
             b.setOnClickListener(this);
         }
-        rBut.setOnClickListener(this);
     }
 
     @Override
@@ -86,24 +94,71 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     @Override
     public void onClick(View view){
-        Button b = (Button)view;
-        buttonClicked(b);
-        //test("TESTING");
+        String vStr = (String) view.getTag();
+       // int vInt = (view.getId());
+       // test(Integer.toString(vInt));
+        if (vStr.equalsIgnoreCase("restart")) {
+            //restart button
+            restartGame();
+        } else if (vStr.equalsIgnoreCase("button")) {
+            //any of the unclicked squares
+            ImageButton b = (ImageButton) view;
+            buttonClicked(b);
+        }
     }
 
-    public void buttonClicked(Button b){
+    public void buttonClicked(ImageButton b){
         if(player){
             //cat's turn
             b.setImageResource(R.drawable.cat);
-            topText.setText("O's Turn");
+            topText.setText("Dog's Turn");
+            b.setTag("cats");
         } else{
             //dog's turn
             b.setImageResource(R.drawable.dog);
-            topText.setText("X's Turn");
+            topText.setText("Cat's Turn");
+            b.setTag("dogs");
         }
         //change player
+        b.setClickable(false);
         player =!player;
+        count++;
 
+        if (count >= 9){
+            topText.setText("It's a tie!");
+        }
+
+
+    }
+
+    public void restartGame(){
+        for (ImageButton b : bArray){
+            b.setTag("button");
+            b.setImageResource(R.drawable.house);
+            b.setClickable(true);
+        }
+
+        for(int r = 0; r <boxNum; r++){
+            for (int c = 0; c <boxNum; c++){
+                checker[r][c]= 0;
+            }
+        }
+        int rand = (int)(Math.random()*10);
+        if (rand>= 5){
+            topText.setText("Cat Starts!");
+            player= true;
+        }else{
+            topText.setText("Dog Starts!");
+            player= false;
+        }
+        count = 0;
+        //test("RESTART GAME");
+    }
+
+    public void checkForWinner(){
+        for (ImageButton b: bArray){
+
+        }
 
     }
 
