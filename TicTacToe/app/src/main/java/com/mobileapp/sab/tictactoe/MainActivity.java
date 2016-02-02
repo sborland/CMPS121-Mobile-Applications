@@ -267,9 +267,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 break;
         }
         if(player){
-            topText.setText("Cat Wins!");
+            topText.setText("Cat Won!");
         } else {
-            topText.setText("Dog Wins!");
+            topText.setText("Dog Won!");
         }
 
         for (ImageButton b : bArray){
