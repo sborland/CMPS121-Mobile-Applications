@@ -9,14 +9,14 @@ public class Weather {
 
     @SerializedName("response")
     @Expose
-    private Response response;
+    private WeatherResponse response;
 
     /**
      * 
      * @return
      *     The response
      */
-    public Response getResponse() {
+    public WeatherResponse getResponse() {
         return response;
     }
 
@@ -25,7 +25,7 @@ public class Weather {
      * @param response
      *     The response
      */
-    public void setResponse(Response response) {
+    public void setResponse(WeatherResponse response) {
         this.response = response;
     }
 
