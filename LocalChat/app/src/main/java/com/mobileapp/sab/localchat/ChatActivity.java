@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -55,6 +56,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     Button postButton;
     String userid;
     String username;
+
     List<ResultList> resultList;
     String Result;
 
@@ -109,13 +111,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Response<GetMessage> response) {
                 int httpCheck = response.code();
                 Log.i(LOG_TAG, "Code is: " + response.code());
-                if (httpCheck!=200) {
+                if (httpCheck != 200) {
                     Log.i(LOG_TAG, "SERVER ERROR");
                 } else {
                     Log.i(LOG_TAG, "SERVER GOOD. Result: " + response.body().getResult());
+                    displayMessages(response.body().getResultList());
                 }
 
             }
+
             @Override
             public void onFailure(Throwable t) {
 
@@ -123,8 +127,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public void displayMessages(){
-        
+    public void displayMessages(List<ResultList> msgs){
+        Iterator<ResultList> msgsCount = msgs.iterator();
+        String[] m= new String[1000];
+
+        Integer[] i;
+        int n=0;
+        while(msgsCount.hasNext()){
+            ResultList L = msgsCount.next();
+           m[n]= L.getMessage();
+            n++;
+
+
+        }
+
+        CustomList adapter = new CustomList(ChatActivity.this, m);
+        message=(ListView)findViewById(R.id.messages);
+        message.setAdapter(adapter);
+
 
     }
 
@@ -221,6 +241,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                                  @Query ("user_id") String user_id);
 
     }
+
 
 
 
