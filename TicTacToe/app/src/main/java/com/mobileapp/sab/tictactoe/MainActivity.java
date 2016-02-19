@@ -277,8 +277,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
-
     private void test(String message){
         Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }
+

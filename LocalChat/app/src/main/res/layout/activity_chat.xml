@@ -10,33 +10,88 @@
     tools:context="com.mobileapp.sab.localchat.ChatActivity"
     android:background="#000000">
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView2" >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/header"
-            android:src="@drawable/header"
-            android:layout_column="0"
-            android:layout_row="0" />
+        <GridLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true">
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:background="#ffffff"
-            android:nestedScrollingEnabled="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:id="@+id/header"
+                android:src="@drawable/header"
+                android:layout_column="0"
+                android:layout_row="0" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:layout_row="2"
-            android:layout_column="0" />
-    </GridLayout>
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:id="@+id/messages"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:background="#000000"
+                android:nestedScrollingEnabled="true"
+                android:choiceMode="multipleChoice"
+                android:headerDividersEnabled="true"
+                android:divider="#000000"
+                android:dividerHeight="2dp"
+                android:fastScrollAlwaysVisible="false"
+                android:focusable="false"
+                android:footerDividersEnabled="true"
+                android:paddingBottom="2dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_row="3"
+                android:layout_column="0">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Refresh"
+                    android:id="@+id/RefreshButton"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:layout_below="@+id/PostButton"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Post"
+                    android:id="@+id/PostButton"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignLeft="@+id/RefreshButton"
+                    android:layout_alignStart="@+id/RefreshButton" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/postText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/RefreshButton"
+                    android:background="#ffffff"
+                    android:layout_alignTop="@+id/PostButton"
+                    android:layout_alignBottom="@+id/RefreshButton"
+                    android:scrollHorizontally="false"
+                    android:maxLines="5"
+                    android:inputType="textMultiLine"
+                    android:focusableInTouchMode="true" />
+            </RelativeLayout>
+
+        </GridLayout>
+    </ScrollView>
 
 </RelativeLayout>

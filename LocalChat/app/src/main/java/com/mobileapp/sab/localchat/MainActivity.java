@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int buttonVar =0;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomText = (TextView) findViewById(R.id.LobbyText);
         chatButton = (Button) findViewById(R.id.ChatButton);
         chatButton.setOnClickListener(this);
-
-
-
 
         // Gets the settings, and creates a random user id if missing.
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -140,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-        public void updateLocation(){
+    public void updateLocation(){
         //sets up location listener
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null &&
@@ -215,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             // Do something with the location you receive.
             double newAccuracy = location.getAccuracy();
+            Log.i(LOG_TAG, "Accuracy is: "+newAccuracy);
 
             long newTime = location.getTime();
             // Is this better than what we had?  We allow a bit of degradation in time.
