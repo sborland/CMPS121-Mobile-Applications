@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,8 +31,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Arrays;
 
 
+
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,6 +60,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     Button postButton;
     String userid;
     String username;
+    CustomList adapter;
 
     List<ResultList> resultList;
     String Result;
@@ -79,9 +84,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         userid = settings.getString("user_id", null);
         username = settings.getString("user_nickname", null);
+        refreshMessages();
     }
 
-
+    //OnClick Listener
     @Override
     public void onClick(View v) {
             hideSoftKeyboard();
@@ -98,7 +104,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //grabs messages from the recent location
+    //grabs messages from server from the recent location
     public void refreshMessages(){
         Retrofit retrofit = accessService();
         RefreshService refreshservice =retrofit.create(RefreshService.class);
@@ -127,22 +133,31 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    //displays messages in the window by grabbing the list and putting it into a String array
     public void displayMessages(List<ResultList> msgs){
         Iterator<ResultList> msgsCount = msgs.iterator();
-        String[] m= new String[1000];
-
-        Integer[] i;
         int n=0;
         while(msgsCount.hasNext()){
             ResultList L = msgsCount.next();
-           m[n]= L.getMessage();
+            n++;
+        }
+        String[] posts = new String[n];
+        String[] names = new String[n];
+        n=0;
+        Iterator<ResultList> msgsPost = msgs.iterator();
+        while(msgsPost.hasNext()){
+            ResultList L = msgsPost.next();
+            String s = L.getMessage()+"\n\n"+L.getNickname();
+            String k = L.getNickname();
+            posts[n]=s;
+            names[n]=k;
             n++;
 
-
         }
-
-        CustomList adapter = new CustomList(ChatActivity.this, m);
-        message=(ListView)findViewById(R.id.messages);
+        Collections.reverse(Arrays.asList(posts));
+        Collections.reverse(Arrays.asList(names));
+        //sends it off to customlist to put it into list view
+        adapter = new CustomList(ChatActivity.this, posts,names,username);
         message.setAdapter(adapter);
 
 
@@ -151,11 +166,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     //posts the user's message if not empty
     public void posting(){
         String post = userPost.getText().toString();
-        //if user posts an empty string, let them know
+        //if user posts an empty string, let them know else send it to the server
         if (post.isEmpty()){
             Log.i(LOG_TAG, "User's post is empty!");
             Toast.makeText(ChatActivity.this, "Whoops! It looks like your post is empty. Please type something in to post it.", Toast.LENGTH_SHORT).show();
         } else{
+            Toast.makeText(ChatActivity.this, "Sending post to server...", Toast.LENGTH_SHORT).show();
             Retrofit retrofit = accessService();
             PostService postservice =retrofit.create(PostService.class);
             //get all the data needed to post the message
@@ -172,8 +188,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     Log.i(LOG_TAG, "Code is: " + response.code());
                     if (httpCheck!=200) {
                         Log.i(LOG_TAG, "SERVER ERROR");
+                        Toast.makeText(ChatActivity.this, "Server Error! Try again.", Toast.LENGTH_SHORT).show();
                     } else{
                         Log.i(LOG_TAG, "SERVER GOOD. Result: "+ response.body().getResult());
+                        Toast.makeText(ChatActivity.this, "Post was sent.", Toast.LENGTH_SHORT).show();
                         userPost.setText("");
                         refreshMessages();
                     }

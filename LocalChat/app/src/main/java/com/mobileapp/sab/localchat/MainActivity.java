@@ -128,13 +128,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bottomText.setText("Location not found! Please allow the app to retrieve your location then click refresh.");
         } else{
             buttonVar = 3;
-            bottomText.setText("Location found!\n Enjoy chatting with friends, meow!");
+            Location loc = locationData.getLocation();
+            bottomText.setText("Location found!\n Enjoy chatting with friends, meow!\nLatitude:"+loc.getLatitude()+"\nLongitude:"+loc.getLongitude());
             chatButton.setText("Enter Chat");
         }
 
 
     }
 
+    //updates location
     public void updateLocation(){
         //sets up location listener
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -184,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
+//button listener
     @Override
     public void onClick(View v) {
         //entering the nickname
