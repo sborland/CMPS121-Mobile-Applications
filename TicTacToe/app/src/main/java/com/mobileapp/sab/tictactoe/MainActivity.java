@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
 
     //buttons
-   ImageButton a1, a2, a3, b1,b2,b3, c1,c2,c3;
+     ImageButton a1, a2, a3, b1,b2,b3, c1,c2,c3;
     Button rBut;
     ImageButton[] bArray;
 
@@ -72,27 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onClick(View view){
@@ -130,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
 
 
-
     }
 
     public void restartGame(){
@@ -145,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 checker[r][c]= 0;
             }
         }
+        //randomly picks the player who starts first
         int rand = (int)(Math.random()*10);
         if (rand>= 5){
             topText.setText("Cat Starts!");
@@ -168,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             //cat is 1
             checker[row][col] = 1;
         } else {
-            //dog is 0
+            //dog is 2
             checker[row][col] = 2;
         }
         int checkC = boxNum;
